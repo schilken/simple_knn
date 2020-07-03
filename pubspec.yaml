@@ -1,0 +1,13 @@
+name: lodash_chain
+version: 0.0.1
+author: Alfred Schilken <alfred@schilken.de>
+description: Small subset of lodash with chaining capability
+homepage: https://github.com/schilken/
+
+environment:
+  sdk: '>=2.0.0 <3.0.0'
+
+#dependencies:
+
+dev_dependencies:
+  test: ^1.0.0
