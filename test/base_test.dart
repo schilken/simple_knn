@@ -365,7 +365,7 @@ void main([args, port]) {
 
   group('min max', () {
     test('min', () {
-      final min = LodashChain.min([
+      final min = LodashChain.listMin([
         5,
         3,
         1,
@@ -375,7 +375,7 @@ void main([args, port]) {
     });
 
     test('max', () {
-      final min = LodashChain.max([
+      final min = LodashChain.listMax([
         5,
         3,
         1,

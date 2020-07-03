@@ -9,10 +9,13 @@ class LodashChain {
   List<List<int>> dim2data;
   List<int> dim1data;
   int dim0data;
+  List<num> dim1numdata;
 
   LodashChain(this.dim2data) : currentDim = 2;
 
-  LodashChain.d1(this.dim1data) : currentDim = 1;
+  LodashChain.d1(this.dim1data)
+      : currentDim = 1,
+        dim1numdata = dim1data;
 
   LodashChain.d0(this.dim0data) : currentDim = 0;
 
@@ -266,32 +269,18 @@ class LodashChain {
         throw Exception('normalize on scalar not defined');
         break;
       case 1:
-        final minValue = min(dim1data);
-        final deltaValue = max(dim1data) - minValue;
-        List<int> tmp1data = [];
-        for (int ix = 0; ix < dim1data.length; ix++) {
-          dim1data[ix] = (dim1data[ix] - minValue) / deltaValue;
+        var minValue = dim1numdata
+            .reduce((num acc, num element) => element < acc ? element : acc);
+        var maxValue = dim1numdata
+            .reduce((num acc, num element) => element > acc ? element : acc);
+        var deltaValue = maxValue - minValue;
+        for (int ix = 0; ix < dim1numdata.length; ix++) {
+          dim1numdata[ix] = (dim1numdata[ix] - minValue) / deltaValue;
         }
         break;
       case 2:
         List<List<int>> tmp2data = [];
         List<int> tmp1data = [];
-        dim2data.forEach((row) {
-          var result = fn(row);
-//          var type = result.runtimeType;
-          if (result is int) {
-            tmp1data.add(result);
-          } else {
-            List<int> newRow = fn(row).cast<int>();
-            tmp2data.add(newRow);
-          }
-        });
-        if (tmp1data.length > 0) {
-          dim1data = tmp1data;
-          currentDim = 1;
-        } else {
-          dim2data = tmp2data;
-        }
     }
     return this;
   }
@@ -312,11 +301,11 @@ class LodashChain {
     return [];
   }
 
-  static int min(List<int> data) {
-    return data.reduce((acc, elt) => elt < acc ? elt : acc);
+  static num listMin(List<num> data) {
+    return data.reduce((acc, element) => element < acc ? element : acc);
   }
 
-  static int max(List<int> data) {
+  static num listMax(List<num> data) {
     return data.reduce((acc, elt) => elt > acc ? elt : acc);
   }
 
