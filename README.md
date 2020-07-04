@@ -4,11 +4,22 @@ Calculate k-nearest neighbours(knn) with a small subset of lodash with chaining 
 
 ## Features
 
-- Calculate knn 
+- Calculate knn from List\<List\<num>> data
+- Provide several helper methods to handle List\<List\<num>> data
+  - normalize
+  - map
+  - sortByColumn
+  - zip
+  - sum
+  - and more
 - Simple Unit Testing
 
 ## Usage
+```
+num result = LodashChain.knn(trainingSet, LodashChain.initial(testPoint), k: k)
+```
 
+See example for a accuracy test loop.
 
 ```dart
 import "package:simple_knn/simple_knn.dart";
@@ -79,5 +90,5 @@ void main() {
 * ✓ static initial of array length 1
 * ✓ knn knn
 
-
+The implementation is heavily influenced by the Udemy Course "Machine learning with javascript" by Stephen Grider. Thanks a lot to Stephen for his great explanations about knn using the Javascript lodash library.  
 
