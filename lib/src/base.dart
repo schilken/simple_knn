@@ -325,6 +325,13 @@ class LodashChain {
     return math.sqrt(chain);
   }
 
+  static List<num> initial(List<num> input) {
+    if (input.length < 2) {
+      return [];
+    }
+    return input.sublist(0, input.length - 1);
+  }
+
   @override
   String toString() => "???";
 }

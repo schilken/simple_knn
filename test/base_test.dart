@@ -425,7 +425,7 @@ void main([args, port]) {
     });
   });
 
-  group('min max', () {
+  group('static min and max', () {
     test('min', () {
       final min = LodashChain.listMin([
         5,
@@ -447,7 +447,7 @@ void main([args, port]) {
     });
   });
 
-  group('distance', () {
+  group('static distance', () {
     test('simple v1 and v2', () {
       final dist = LodashChain.distance([
         0,
@@ -476,6 +476,25 @@ void main([args, port]) {
         44
       ]);
       expect(dist, closeTo(6.164, 0.01));
+    });
+  });
+
+  group('static initial', () {
+    test('of array length 4', () {
+      List<num> original = [50, 500, 5000, 1];
+      final result = LodashChain.initial(original);
+      expect(
+        result,
+        [50, 500, 5000],
+      );
+      expect(original, [50, 500, 5000, 1]);
+    });
+    test('of array length 1', () {
+      final result = LodashChain.initial([50]);
+      expect(
+        result,
+        [],
+      );
     });
   });
 }
