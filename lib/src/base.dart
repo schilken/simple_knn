@@ -52,7 +52,7 @@ class LodashChain {
     return this;
   }
 
-  LodashChain last() {
+  LodashChain lastInChain() {
     switch (currentDim) {
       case 0:
         throw Exception('slice on scalar not defined');
@@ -97,7 +97,8 @@ class LodashChain {
         dim1data.sort();
         break;
       case 2:
-        dim2data.sort((a, b) => a[index].compareTo(b[index]));
+        dim2data
+            .sort((List<num> a, List<num> b) => a[index].compareTo(b[index]));
         ;
     }
     return this;
@@ -138,10 +139,10 @@ class LodashChain {
         dim2data.forEach((row) {
           var result = fn(row);
 //          var type = result.runtimeType;
-          if (result is int) {
+          if (result is num) {
             tmp1data.add(result);
           } else {
-            List<num> newRow = fn(row).cast<int>();
+            List<num> newRow = fn(row).cast<num>();
             tmp2data.add(newRow);
           }
         });
@@ -185,9 +186,10 @@ class LodashChain {
         currentDim = 2;
         break;
       case 2:
-        Map<int, int> counterMap = {};
-        dim2data.forEach((row) {
-          counterMap[row[index]] = (counterMap[row[index]] ?? 0) + 1;
+        Map<num, int> counterMap = {};
+        dim2data.forEach((List<num> row) {
+          num value = row[index];
+          counterMap[value] = (counterMap[value] ?? 0) + 1;
         });
         dim2data.clear();
         counterMap.forEach((k, v) => dim2data.add([k, v]));
@@ -330,6 +332,27 @@ class LodashChain {
       return [];
     }
     return input.sublist(0, input.length - 1);
+  }
+
+  static num last(List<num> input) {
+    if (input.length < 1) {
+      return null;
+    }
+    return input.last;
+  }
+
+  static num knn(List<List<num>> trainingSet, List<num> testPoint, {int k}) {
+    return LodashChain(trainingSet)
+        .map((row) {
+          return [distance(initial(row), testPoint), LodashChain.last(row)];
+        })
+        .sortByColumn(0)
+        .slice(0, k)
+        .countByToPairs(1)
+        .sortByColumn(1)
+        .lastInChain()
+        .first()
+        .value();
   }
 
   @override

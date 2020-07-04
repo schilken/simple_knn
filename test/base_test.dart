@@ -68,13 +68,13 @@ void main([args, port]) {
     });
   });
 
-  group('last', () {
+  group('lastInChain', () {
     test('two dimensions', () {
       final chain = LodashChain([
         [11, 12],
         [21, 22],
         [31, 32],
-      ]).last().value();
+      ]).lastInChain().value();
       expect(
         chain,
         [31, 32],
@@ -85,14 +85,14 @@ void main([args, port]) {
         11,
         22,
         33,
-      ]).last().value();
+      ]).lastInChain().value();
       expect(chain, 33);
     });
     test('only scalar', () {
       expect(
           () => LodashChain.d0(
                 11,
-              ).slice(0, 1).value(),
+              ).lastInChain().value(),
           throwsException);
     });
   });
@@ -495,6 +495,24 @@ void main([args, port]) {
         result,
         [],
       );
+    });
+  });
+
+  group('knn', () {
+    test('knn', () {
+      List<List<num>> trainingSet = [
+        [50, 500, 5000, 1],
+        [51, 500, 5000, 2],
+        [52, 500, 5000, 3],
+        [53, 500, 5000, 4],
+        [53, 500, 5000, 4],
+        [54, 500, 5000, 5],
+        [55, 500, 5000, 6],
+        [56, 500, 5000, 7],
+      ];
+      List<num> testPoint = [53, 500, 5000];
+      final result = LodashChain.knn(trainingSet, testPoint, k: 2);
+      expect(result, 4);
     });
   });
 }
