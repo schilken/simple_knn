@@ -6,16 +6,14 @@ class LodashChain {
 
   int currentDim;
 
-  List<List<int>> dim2data;
-  List<int> dim1data;
-  int dim0data;
-  List<num> dim1numdata;
+  List<List<num>> dim2data;
+  List<num> dim1data;
+  num dim0data;
 
   LodashChain(this.dim2data) : currentDim = 2;
 
-  LodashChain.d1(this.dim1data)
-      : currentDim = 1,
-        dim1numdata = dim1data;
+  LodashChain.d1(this.dim1data) : currentDim = 1;
+//        dim1data = dim1numdata.map((numVal) => numVal.toInt()).toList();
 
   LodashChain.d0(this.dim0data) : currentDim = 0;
 
@@ -26,13 +24,13 @@ class LodashChain {
         currentDim = 0;
         break;
       case 1:
-        dim1data = List<int>()..length = shape[0];
+        dim1data = List<num>()..length = shape[0];
         currentDim = 1;
         break;
       case 2:
         dim2data = [];
         for (int row = 0; row < shape[0]; row++) {
-          dim2data.add(List<int>()..length = shape[1]);
+          dim2data.add(List<num>()..length = shape[1]);
         }
         currentDim = 2;
         break;
@@ -127,7 +125,7 @@ class LodashChain {
         throw Exception('map on scalar not defined');
         break;
       case 1:
-        List<int> tmp1data = [];
+        List<num> tmp1data = [];
         dim1data.forEach((row) {
           int newRow = fn(row);
           tmp1data.add(newRow);
@@ -135,15 +133,15 @@ class LodashChain {
         dim1data = tmp1data;
         break;
       case 2:
-        List<List<int>> tmp2data = [];
-        List<int> tmp1data = [];
+        List<List<num>> tmp2data = [];
+        List<num> tmp1data = [];
         dim2data.forEach((row) {
           var result = fn(row);
 //          var type = result.runtimeType;
           if (result is int) {
             tmp1data.add(result);
           } else {
-            List<int> newRow = fn(row).cast<int>();
+            List<num> newRow = fn(row).cast<int>();
             tmp2data.add(newRow);
           }
         });
@@ -197,7 +195,7 @@ class LodashChain {
     return this;
   }
 
-  LodashChain zip(List<int> array) {
+  LodashChain zip(List<num> array) {
     switch (currentDim) {
       case 0:
         throw Exception('countByToPairs on scalar not defined');
@@ -263,29 +261,38 @@ class LodashChain {
     return this;
   }
 
-  LodashChain normalize(int columns) {
+  LodashChain normalize(int numColumns) {
     switch (currentDim) {
       case 0:
         throw Exception('normalize on scalar not defined');
         break;
       case 1:
-        var minValue = dim1numdata
+        var minValue = dim1data
             .reduce((num acc, num element) => element < acc ? element : acc);
-        var maxValue = dim1numdata
+        var maxValue = dim1data
             .reduce((num acc, num element) => element > acc ? element : acc);
         var deltaValue = maxValue - minValue;
-        for (int ix = 0; ix < dim1numdata.length; ix++) {
-          dim1numdata[ix] = (dim1numdata[ix] - minValue) / deltaValue;
+        for (int ix = 0; ix < dim1data.length; ix++) {
+          dim1data[ix] = (dim1data[ix] - minValue) / deltaValue;
         }
         break;
       case 2:
-        List<List<int>> tmp2data = [];
-        List<int> tmp1data = [];
+        for (int col = 0; col < numColumns; col++) {
+          List<num> column = dim2data.map((List<num> row) => row[col]).toList();
+          var minValue = column
+              .reduce((num acc, num element) => element < acc ? element : acc);
+          var maxValue = column
+              .reduce((num acc, num element) => element > acc ? element : acc);
+          var deltaValue = maxValue - minValue;
+          for (int ix = 0; ix < dim2data.length; ix++) {
+            dim2data[ix][col] = (dim2data[ix][col] - minValue) / deltaValue;
+          }
+        }
     }
     return this;
   }
 
-  List<int> get valueShape {
+  List<num> get valueShape {
     switch (currentDim) {
       case 0:
         return [];

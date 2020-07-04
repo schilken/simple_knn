@@ -416,23 +416,22 @@ void main([args, port]) {
   group('normalize', () {
     test('two dimensions filled', () {
       final chain = LodashChain([
-        [50, 5],
-        [20, 2],
-        [10, 1]
-      ]).normalize(1).value();
+        [50, 500, 5000, 1],
+        [30, 300, 3000, 2],
+        [10, 100, 1000, 3]
+      ]).normalize(3).value();
       expect(chain, [
-        [1, 5],
-        [0.5, 2],
-        [0, 1]
+        [1, 1, 1, 1],
+        [0.5, 0.5, 0.5, 2],
+        [0, 0, 0, 3]
       ]);
     });
     test('only one dimension filled', () {
       final chain = LodashChain.d1([
-        55,
-        22,
-        11,
+        50,
+        30,
+        10,
       ]).normalize(1).value();
-      final shape = LodashChain.emptyClone(chain).valueShape;
       expect(chain, [
         1,
         0.5,
