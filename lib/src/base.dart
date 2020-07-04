@@ -316,6 +316,15 @@ class LodashChain {
     return data.reduce((acc, elt) => elt > acc ? elt : acc);
   }
 
+  static num distance(List<num> v1, List<num> v2) {
+    final chain = LodashChain.d1(v1)
+        .zip(v2)
+        .map((row) => math.pow(row[0] - row[1], 2))
+        .sum()
+        .value();
+    return math.sqrt(chain);
+  }
+
   @override
   String toString() => "???";
 }

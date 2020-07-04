@@ -363,28 +363,6 @@ void main([args, port]) {
     });
   });
 
-  group('min max', () {
-    test('min', () {
-      final min = LodashChain.listMin([
-        5,
-        3,
-        1,
-        2,
-      ]);
-      expect(min, 1);
-    });
-
-    test('max', () {
-      final min = LodashChain.listMax([
-        5,
-        3,
-        1,
-        2,
-      ]);
-      expect(min, 5);
-    });
-  });
-
   group('cloning', () {
     test('two dimensions filled', () {
       final chain = LodashChain([
@@ -444,6 +422,60 @@ void main([args, port]) {
       );
       final shape = LodashChain.emptyClone(chain).valueShape;
       expect(shape.length, 0);
+    });
+  });
+
+  group('min max', () {
+    test('min', () {
+      final min = LodashChain.listMin([
+        5,
+        3,
+        1,
+        2,
+      ]);
+      expect(min, 1);
+    });
+
+    test('max', () {
+      final min = LodashChain.listMax([
+        5,
+        3,
+        1,
+        2,
+      ]);
+      expect(min, 5);
+    });
+  });
+
+  group('distance', () {
+    test('simple v1 and v2', () {
+      final dist = LodashChain.distance([
+        0,
+        0,
+        0,
+        0,
+      ], [
+        1,
+        1,
+        1,
+        1
+      ]);
+      expect(dist, 2.0);
+    });
+
+    test('simple v1 and v2', () {
+      final dist = LodashChain.distance([
+        10,
+        20,
+        30,
+        40,
+      ], [
+        12,
+        23,
+        33,
+        44
+      ]);
+      expect(dist, closeTo(6.164, 0.01));
     });
   });
 }
