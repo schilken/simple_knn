@@ -1,4 +1,4 @@
-library lodash_chain;
+library simple_knn;
 
 import 'dart:math' as math;
 

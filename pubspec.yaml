@@ -1,7 +1,7 @@
-name: lodash_chain
+name: simple_knn
 version: 0.0.1
 author: Alfred Schilken <alfred@schilken.de>
-description: Small subset of lodash with chaining capability
+description: Calculate k-nearest neighbours(knn) with a small subset of lodash with chaining capability
 homepage: https://github.com/schilken/
 
 environment:

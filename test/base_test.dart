@@ -1,8 +1,8 @@
-library lodash_chain.test.base;
+library simple_knn.test.base;
 
 import 'dart:math' as math;
 import 'package:test/test.dart';
-import 'package:lodash_chain/lodash_chain.dart';
+import 'package:simple_knn/simple_knn.dart';
 
 void main([args, port]) {
   // setUpAll(() => null;

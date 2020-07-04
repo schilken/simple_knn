@@ -1,4 +1,4 @@
-part of lodash_chain;
+part of simple_knn;
 
 /// The root of the console API
 class LodashChain {
@@ -13,7 +13,6 @@ class LodashChain {
   LodashChain(this.dim2data) : currentDim = 2;
 
   LodashChain.d1(this.dim1data) : currentDim = 1;
-//        dim1data = dim1numdata.map((numVal) => numVal.toInt()).toList();
 
   LodashChain.d0(this.dim0data) : currentDim = 0;
 

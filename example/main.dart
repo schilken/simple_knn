@@ -1,4 +1,4 @@
-import "package:lodash_chain/lodash_chain.dart";
+import "package:simple_knn/simple_knn.dart";
 import 'data.dart';
 
 void main() {
