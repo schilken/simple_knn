@@ -61,7 +61,6 @@ class LodashChain {
         break;
       case 2:
         dim2data = dim2data.sublist(start, end);
-        ;
     }
     return this;
   }
@@ -77,7 +76,6 @@ class LodashChain {
       case 2:
         dim1data = dim2data.last;
         currentDim = 1;
-        ;
     }
     return this;
   }
@@ -95,7 +93,6 @@ class LodashChain {
         dim1data = dim2data.first;
         dim2data.clear();
         currentDim = 1;
-        ;
     }
     return this;
   }
@@ -110,7 +107,6 @@ class LodashChain {
       case 2:
         dim2data
             .sort((List<num> a, List<num> b) => a[index].compareTo(b[index]));
-        ;
     }
     return this;
   }
@@ -155,7 +151,7 @@ class LodashChain {
             tmp2data.add(newRow);
           }
         });
-        if (tmp1data.length > 0) {
+        if (tmp1data.isNotEmpty) {
           dim1data = tmp1data;
           currentDim = 1;
         } else {
@@ -252,7 +248,7 @@ class LodashChain {
         break;
       case 2:
         dim0data = 0;
-        if (dim2data.length > 0) {
+        if (dim2data.isNotEmpty) {
           for (int row = 0; row < dim2data.length; row++) {
             for (int col = 0; col < dim2data[0].length; col++) {
               dim0data += dim2data[row][col];
@@ -335,7 +331,7 @@ class LodashChain {
   }
 
   static num? last(List<num> input) {
-    if (input.length < 1) {
+    if (input.isEmpty) {
       return null;
     }
     return input.last;

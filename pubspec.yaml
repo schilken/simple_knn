@@ -1,5 +1,5 @@
 name: simple_knn
-version: 0.0.2
+version: 0.0.3
 description: Calculate k-nearest neighbours(knn) with a small subset of lodash with chaining capability
 homepage: https://github.com/schilken/simple_knn
 
@@ -10,3 +10,4 @@ environment:
 
 dev_dependencies:
   test: ^1.0.0
+  lints: ^2.0.0
