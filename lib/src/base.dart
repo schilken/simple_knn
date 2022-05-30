@@ -4,32 +4,48 @@ part of simple_knn;
 class LodashChain {
   static bool initialized = false;
 
-  int currentDim;
+  late int currentDim;
 
-  List<List<num>> dim2data;
-  List<num> dim1data;
-  num dim0data;
+  late List<List<num>> dim2data;
+  late List<num> dim1data;
+  late num dim0data;
 
-  LodashChain(this.dim2data) : currentDim = 2;
+  LodashChain(this.dim2data)
+      : currentDim = 2,
+        dim1data = [],
+        dim0data = 0;
 
-  LodashChain.d1(this.dim1data) : currentDim = 1;
+  LodashChain.d1(this.dim1data)
+      : currentDim = 1,
+        dim2data = [[]],
+        dim0data = 0;
 
-  LodashChain.d0(this.dim0data) : currentDim = 0;
+  LodashChain.d0(this.dim0data)
+      : currentDim = 0,
+        dim2data = [[]],
+        dim1data = [];
 
   LodashChain.emptyClone(LodashChain object) {
     final shape = object.valueShape;
     switch (object.currentDim) {
       case 0:
         currentDim = 0;
+        dim2data = [];
+        dim1data = [];
+        dim0data = 0;
         break;
       case 1:
-        dim1data = List<num>()..length = shape[0];
+        dim1data = List.filled(shape[0], 0);
         currentDim = 1;
+        dim2data = [];
+        dim0data = 0;
         break;
       case 2:
+        dim0data = 0;
+        dim1data = [];
         dim2data = [];
         for (int row = 0; row < shape[0]; row++) {
-          dim2data.add(List<num>()..length = shape[1]);
+          dim2data.add(List.filled(shape[1], 0));
         }
         currentDim = 2;
         break;
@@ -40,7 +56,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('slice on scalar not defined');
-        break;
       case 1:
         dim1data = dim1data.sublist(start, end);
         break;
@@ -55,7 +70,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('slice on scalar not defined');
-        break;
       case 1:
         dim0data = dim1data.last;
         currentDim = 0;
@@ -72,7 +86,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('slice on scalar not defined');
-        break;
       case 1:
         dim0data = dim1data.first;
         dim1data.clear();
@@ -91,7 +104,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('sortByColumn on scalar not defined');
-        break;
       case 1:
         dim1data.sort();
         break;
@@ -107,7 +119,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('size on scalar not defined');
-        break;
       case 1:
         dim0data = dim1data.length;
         currentDim = 0;
@@ -123,7 +134,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('map on scalar not defined');
-        break;
       case 1:
         List<num> tmp1data = [];
         dim1data.forEach((row) {
@@ -159,7 +169,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('filter on scalar not defined');
-        break;
       case 1:
         dim1data = dim1data.where((row) => fn(row)).toList();
         break;
@@ -173,9 +182,8 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('countByToPairs on scalar not defined');
-        break;
       case 1:
-        Map<int, int> counterMap = {};
+        Map<num, num> counterMap = {};
         dim1data.forEach((row) {
           counterMap[row] = (counterMap[row] ?? 0) + 1;
         });
@@ -185,7 +193,7 @@ class LodashChain {
         currentDim = 2;
         break;
       case 2:
-        Map<num, int> counterMap = {};
+        Map<num, num> counterMap = {};
         dim2data.forEach((List<num> row) {
           num value = row[index];
           counterMap[value] = (counterMap[value] ?? 0) + 1;
@@ -200,7 +208,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('countByToPairs on scalar not defined');
-        break;
       case 1:
         if (dim1data.length != array.length) {
           throw Exception('length of array differs from wrapped data');
@@ -227,10 +234,8 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         return dim0data;
-        break;
       case 1:
         return dim1data;
-        break;
       case 2:
         return dim2data;
     }
@@ -240,7 +245,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('countByToPairs on scalar not defined');
-        break;
       case 1:
         dim0data = dim1data.reduce((acc, elt) => acc + elt);
         dim1data.clear();
@@ -266,7 +270,6 @@ class LodashChain {
     switch (currentDim) {
       case 0:
         throw Exception('normalize on scalar not defined');
-        break;
       case 1:
         var minValue = dim1data
             .reduce((num acc, num element) => element < acc ? element : acc);
@@ -293,14 +296,12 @@ class LodashChain {
     return this;
   }
 
-  List<num> get valueShape {
+  List<int> get valueShape {
     switch (currentDim) {
       case 0:
         return [];
-        break;
       case 1:
         return [dim1data.length];
-        break;
       case 2:
         final rows = dim2data.length;
         final cols = rows > 0 ? dim2data[0].length : 0;
@@ -333,14 +334,15 @@ class LodashChain {
     return input.sublist(0, input.length - 1);
   }
 
-  static num last(List<num> input) {
+  static num? last(List<num> input) {
     if (input.length < 1) {
       return null;
     }
     return input.last;
   }
 
-  static num knn(List<List<num>> trainingSet, List<num> testPoint, {int k}) {
+  static num knn(List<List<num>> trainingSet, List<num> testPoint,
+      {int k = 0}) {
     return LodashChain(trainingSet)
         .map((row) {
           return [distance(initial(row), testPoint), LodashChain.last(row)];
